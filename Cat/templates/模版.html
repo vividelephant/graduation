@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="zh">
     <head>
@@ -7,8 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>仪表盘</title>
-        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <title>Tables - SB Admin</title>
+        <link href="css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -30,10 +29,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">设置</a>
-                        <a class="dropdown-item" href="#">登陆</a>
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'user_logout'%}">退出</a>
+                        <a class="dropdown-item" href="login.html">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -44,22 +43,20 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{% url 'index' %}">
+                            <a class="nav-link" href="index.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                仪表盘
+                                Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                用户
+                                Layouts
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{% url 'user_manage' %}">用户管理</a>
-                                    <a class="nav-link" href="layout-static.html">权限管理</a>
-{#                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>#}
-{#                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>#}
+                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -98,9 +95,9 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
-                            <a class="nav-link" href="{% url 'client_table' %}">
+                            <a class="nav-link" href="tables.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                客户信息
+                                Tables
                             </a>
                         </div>
                     </div>
@@ -113,134 +110,48 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">仪表盘</h1>
+                        <h1 class="mt-4">Tables</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">仪表盘</li>
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Tables</li>
                         </ol>
-                        <div class="row">
-{#                            <div class="col-xl-3 col-md-6">#}
-{#                                <div class="card bg-primary text-white mb-4">#}
-{#                                    <div class="card-body">Primary Card</div>#}
-{#                                    <div class="card-footer d-flex align-items-center justify-content-between">#}
-{#                                        <a class="small text-white stretched-link" href="#">View Details</a>#}
-{#                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">安全客户</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a  class="small text-white stretched-link" href="{% url 'safe_clients' %}">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">易流失客户</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">已流失客户</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area mr-1"></i>
-                                        Area Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i>
-                                        Bar Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
+                                <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
+                                .
                             </div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                    客户信息概览(共1000条)
+                                DataTable Example
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
-{#                                            <tr>#}
-{#                                                <th>姓名</th>#}
-{#                                                <th>Position</th>#}
-{#                                                <th>Office</th>#}
-{#                                                <th>Age</th>#}
-{#                                                <th>Start date</th>#}
-{#                                                <th>Salary</th>#}
-{#                                            </tr>#}
-                                            <tr><th>id</th><th>customer_id</th><th>surname</th><th>credit_score</th><th>geography</th><th>gender</th><th>age</th><th>tenure</th><th>balance</th><th>num_of_products</th><th>has_cr_card</th><th>is_active_member</th><th>estimated_salary</th><th>exited</th></tr>
+                                            <tr>
+                                                <th>工号</th>
+                                                <th>用户名</th>
+                                                <th>姓名</th>
+                                                <th>手机</th>
+                                                <th>角色</th>
+                                                <th>上次登陆时间</th>
+                                            </tr>
                                         </thead>
                                         <tfoot>
-{#                                            <tr>#}
-{#                                                <th>Name</th>#}
-{#                                                <th>Position</th>#}
-{#                                                <th>Office</th>#}
-{#                                                <th>Age</th>#}
-{#                                                <th>Start date</th>#}
-{#                                                <th>Salary</th>#}
-{#                                            </tr>#}
                                             <tr>
-                                                <th>id</th>
-                                                <th>customer_id</th>
-                                                <th>surname</th>
-                                                <th>credit_score</th>
-                                                <th>geography</th>
-                                                <th>gender</th>
-                                                <th>age</th>
-                                                <th>tenure</th>
-                                                <th>balance</th>
-                                                <th>num_of_products</th>
-                                                <th>has_cr_card</th>
-                                                <th>is_active_member</th>
-                                                <th>estimated_salary</th>
-                                                <th>exited</th>
+                                                <th>工号</th>
+                                                <th>用户名</th>
+                                                <th>姓名</th>
+                                                <th>手机</th>
+                                                <th>角色</th>
+                                                <th>上次登陆时间</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
 
-                                                {% for data in datas %}
-                                                    <tr>
-                                                 <td>{{ data.id }}</td>
-                                                 <td>{{ data.customer_id }}</td>
-                                                 <td>{{ data.surname }}</td>
-                                                 <td>{{ data.credit_score }}</td>
-                                                 <td>{{ data.geography }}</td>
-                                                 <td>{{ data.gender }}</td>
-                                                 <td>{{ data.age }}</td>
-                                                 <td>{{ data.tenure }}</td>
-                                                 <td>{{ data.balance }}</td>
-                                                 <td>{{ data.num_of_products }}</td>
-                                                 <td>{{ data.has_cr_card }}</td>
-                                                 <td>{{ data.is_active_member }}</td>
-                                                 <td>{{ data.estimated_salary }}</td>
-                                                 <td>{{ data.exited }}</td>
-                                                    </tr>
-                                                 {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -264,12 +175,61 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="{% static '/js/scripts.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="{% static 'assets/demo/chart-area-demo.js' %}"></script>
-        <script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
+        <script src="js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="{% static '/assets/demo/datatables-demo.js' %}"></script>
+        <script src="assets/demo/datatables-demo.js"></script>
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{% url 'delete_ueser' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="addLabel">删除账号信息</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="job_number_n" class="control-label">工号：</label>
+                            <input type="text" class="form-control" id="job_number_n" name="job_number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name_n" class="control-label">用户名：</label>
+                            <input type="text" class="form-control" id="name_n" name="user_name" required>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>

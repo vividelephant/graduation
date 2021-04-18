@@ -120,7 +120,7 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">欢迎回来！</h1>
                                     </div>
-                                    <form class="user" method="post" action="{% url 'login' %}">
+                                    <form class="user" method="post" action="{% url 'user_login' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
@@ -168,14 +168,14 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{% static '/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="{% static '/js/sb-admin-2.min.js' %}"></script>
 
 </body>
 
