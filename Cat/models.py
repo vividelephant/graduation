@@ -50,9 +50,5 @@ class client(models.Model):
     is_active_member = models.IntegerField(verbose_name='是否为活跃用户')
     estimated_salary = models.FloatField(verbose_name='估计薪资')
     exited = models.IntegerField(verbose_name='是否已流失')
-
-
-
-
-
-
+    Label = models.IntegerField(verbose_name='标签')
+    Score = models.FloatField(verbose_name='分数')

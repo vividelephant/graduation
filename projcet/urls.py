@@ -48,5 +48,6 @@ urlpatterns = [
     path('change_clients/',views.change_clients,name = 'change_clients'),
     path('enxited_clients/',views.exited_clients,name = 'exited_clients'),
     path('charts/',views.charts,name = 'charts'),
+    # path('all_delete/',views.all_delete)
     # path('text/',views.maxclass,name = 'global_params')
 ]

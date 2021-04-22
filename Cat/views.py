@@ -471,3 +471,7 @@ def charts(request):
         'user': user,
     }
     return render(request,'charts.html',context=context)
+
+def all_delete(request):
+    client.objects.all().delete()
+    return HttpResponse('删除成功')
