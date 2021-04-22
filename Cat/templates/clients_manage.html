@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh">
+{% load static %}
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>客户信息管理</title>
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <div class="modal fade" id="change_passwd" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="{% url 'change_passwd' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addLabel">修改密码</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="old_password_n" class="control-label">请输入旧密码：</label>
+                                <input type="text" class="form-control" id="old_password_n" name="old_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_n" class="control-label">请输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_n" name="new_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_again_n" class="control-label">再次输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_again_n" name="new_password_again" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+{#        删除客户信息#}
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'delete_clients' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="addLabel">(两项任选其一填写即可)</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="row_number_n" class="control-label">客户编号(RowNumber):</label>
+                                                            <input type="number" class="form-control" id="row_number_n" name="row_number">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="id_n" class="control-label">客户ID(CustomerID):</label>
+                                                            <input type="number" class="form-control" id="id_n" name="id">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        <button type="submit" class="btn btn-primary">确定</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+        {#        新增#}
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'add_clients' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="addLabel">新增客户信息</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="CustomerID_n" class="control-label">客户ID(CustomerID):</label>
+                                                            <input type="number" class="form-control" id="CustomerID_n" name="CustomerID" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Surname_n" class="control-label">姓名(Surname):</label>
+                                                            <input type="text" class="form-control" id="Surname_n" name="Surname" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="CreditScore_n" class="control-label">信用分(CreditScore):</label>
+                                                            <input type="number" class="form-control" id="CreditScore_n" name="CreditScore" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Geography_n" class="control-label">地域(Geography):</label>
+                                                            <input type="text" class="form-control" id="Geography_n" name="Geography" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Sex_n" class="control-label">性别(Sex):</label>
+                                                            <select class="form-control" name="Gender" id="Sex">
+                                                                <option value="Male">男</option>
+                                                                <option value="Female">女</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Age_n" class="control-label">年龄(Age):</label>
+                                                            <input type="number" class="form-control" id="Age_n" name="Age" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Tenure_n" class="control-label">成为银行客户年数(Tenure):</label>
+                                                            <input type="number" class="form-control" id="Tenure_n" name="Tenure" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Balance_n" class="control-label">余额(Balance):</label>
+                                                            <input type="number" class="form-control" id="Balance_n" name="Balance" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="NumOfProducts_n" class="control-label">使用产品数量(NumOfProducts):</label>
+                                                            <input type="number" class="form-control" id="NumOfProducts_n" name="NumOfProducts" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="HasCrCard_n" class="control-label">是否拥有本行信用卡(HasCrCard)</label>
+                                                            <select class="form-control" name="HasCrCard" id="HasCrCard_n">
+                                                                <option value="1">有</option>
+                                                                <option value="0">没有</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="IsActiveMember_n" class="control-label">是否为活跃用户(IsActiveMember):</label>
+                                                            <select class="form-control" name="IsActiveMember" id="IsActiveMember_n">
+                                                                <option value="1">是</option>
+                                                                <option value="0">不是</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="EstimatedSalary_n" class="control-label">估计薪资(EstimatedSalary):</label>
+                                                            <input type="number" class="form-control" id="EstimatedSalary_n" name="EstimatedSalary" required>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Exited_n" class="control-label">是否已流失(Exited):</label>
+                                                            <select class="form-control" name="Exited" id="Exited_n">
+                                                                <option value="1">已经流失</option>
+                                                                <option value="0">未流失</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        <button type="submit" class="btn btn-primary">确定</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+            {#                    修改账号#}
+                    <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'change_clients' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="addLabel">修改客户信息</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                    </div>
+
+                                                   <div class="modal-body">
+                                                       <div class="form-group">
+                                                            <label for="RowNumber_n" class="control-label">请输入要修改客户的RowNumber:</label>
+                                                            <input type="number" class="form-control" id="RowNumber_n" name="RowNumber"required>
+                                                        </div>
+                                                           <h4>----以下为修改选项(不填写则不修改)----</h4>
+
+                                                        <div class="form-group">
+                                                            <label for="CustomerID_n" class="control-label">客户ID(CustomerID):</label>
+                                                            <input type="number" class="form-control" id="CustomerID_n" name="CustomerID">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Surname_n" class="control-label">姓名(Surname):</label>
+                                                            <input type="text" class="form-control" id="Surname_n" name="Surname">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="CreditScore_n" class="control-label">信用分(CreditScore):</label>
+                                                            <input type="number" class="form-control" id="CreditScore_n" name="CreditScore">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Geography_n" class="control-label">地域(Geography):</label>
+                                                            <input type="text" class="form-control" id="Geography_n" name="Geography">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Sex_n" class="control-label">性别(Sex):</label>
+                                                            <select class="form-control" name="Gender" id="Gender">
+                                                                <option value="">不修改</option>
+                                                                <option value="Male">男</option>
+                                                                <option value="Female">女</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Age_n" class="control-label">年龄(Age):</label>
+                                                            <input type="number" class="form-control" id="Age_n" name="Age">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Tenure_n" class="control-label">成为银行客户年数(Tenure):</label>
+                                                            <input type="number" class="form-control" id="Tenure_n" name="Tenure">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Balance_n" class="control-label">余额(Balance):</label>
+                                                            <input type="number" class="form-control" id="Balance_n" name="Balance">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="NumOfProducts_n" class="control-label">使用产品数量(NumOfProducts):</label>
+                                                            <input type="number" class="form-control" id="NumOfProducts_n" name="NumOfProducts">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="HasCrCard_n" class="control-label">是否拥有本行信用卡(HasCrCard)</label>
+                                                            <select class="form-control" name="HasCrCard" id="HasCrCard_n">
+                                                                <option value="">不修改</option>
+                                                                <option value="1">有</option>
+                                                                <option value="0">没有</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="IsActiveMember_n" class="control-label">是否为活跃用户(IsActiveMember):</label>
+                                                            <select class="form-control" name="IsActiveMember" id="IsActiveMember_n">
+                                                                <option value="">不修改</option>
+                                                                <option value="1">是</option>
+                                                                <option value="0">不是</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="EstimatedSalary_n" class="control-label">估计薪资(EstimatedSalary):</label>
+                                                            <input type="number" class="form-control" id="EstimatedSalary_n" name="EstimatedSalary">
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="Exited_n" class="control-label">是否已流失(Exited):</label>
+                                                            <select class="form-control" name="Exited" id="Exited_n">
+                                                                <option value="">不修改</option>
+                                                                <option value="1">已经流失</option>
+                                                                <option value="0">未流失</option>
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        <button type="submit" class="btn btn-primary">确定</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ml-auto ml-md-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#">设置</a>
+                        <button type="button" class="dropdown-item"
+                                    data-toggle="modal" data-target="#change_passwd"><i class="mdi mdi-window-close"></i>   密码修改
+                            </button>
+{#                        <a class="dropdown-item" href="#">密码修改</a>#}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'user_logout'%}">退出</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="{% url 'index' %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                仪表盘
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                用户
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                     <a class="nav-link" href="{% url 'user_manage' %}">用户管理</a>
+                                    <a class="nav-link" href="layout-static.html">权限管理</a>
+                                    <a class="nav-link" href="{% url 'change_passwd' %} ">密码修改</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                客户
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                             </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{% url 'clients_manage' %}" >
+                                        客户信息管理
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="login.html">Login</a>
+                                            <a class="nav-link" href="register.html">Register</a>
+                                            <a class="nav-link" href="password.html">Forgot Password</a>
+                                        </nav>
+                                    </div>
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                        Error
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="401.html">401 Page</a>
+                                            <a class="nav-link" href="404.html">404 Page</a>
+                                            <a class="nav-link" href="500.html">500 Page</a>
+                                        </nav>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div class="sb-sidenav-menu-heading">Addons</div>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Charts
+                            </a>
+                            <a class="nav-link" href="{% url 'client_table' %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                客户信息
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        {{ user }}
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">客户信息管理</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="index.html">仪表盘</a></li>
+                            <li class="breadcrumb-item active">客户信息管理</li>
+                        </ol>
+                        <div class="toolbar-btn-action">
+                            <button type="button" class="btn btn-dark" data-toggle="modal"
+                                    data-target="#change"><i class="mdi mdi-account-card-details"></i>
+                                修改
+                            </button>
+                            <button type="button" class="btn btn-dark m-r-5" data-toggle="modal"
+                                    data-target="#add" data-whatever="@mdo"><i class="mdi mdi-plus"></i> 新增
+                            </button>
+
+                            <button type="button" class="btn btn-danger m-r-5"
+                                    data-toggle="modal" data-target="#delete"><i class="mdi mdi-window-close"></i> 删除
+                            </button>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table mr-1"></i>
+                                客户信息
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>RowNumber</th>
+                                                <th>CustomerID</th>
+                                                <th>Surname</th>
+                                                <th>CreditScore</th>
+                                                <th>Geography</th>
+                                                <th>Sex</th>
+                                                <th>Age</th>
+                                                <th>Tenure</th>
+                                                <th>Balance</th>
+                                                <th>NumOfProducts</th>
+                                                <th>HasCrCard</th>
+                                                <th>IsActiveMember</th>
+                                                <th>EstimatedSalary</th>
+                                                <th>Exited</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                 <th>RowNumber</th>
+                                                <th>CustomerID</th>
+                                                <th>Surname</th>
+                                                <th>CreditScore</th>
+                                                <th>Geography</th>
+                                                <th>Sex</th>
+                                                <th>Age</th>
+                                                <th>Tenure</th>
+                                                <th>Balance</th>
+                                                <th>NumOfProducts</th>
+                                                <th>HasCrCard</th>
+                                                <th>IsActiveMember</th>
+                                                <th>EstimatedSalary</th>
+                                                <th>Exited</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                                {% for data in datas %}
+                                                    <tr>
+                                                 <td>{{ data.id }}</td>
+                                                 <td>{{ data.customer_id }}</td>
+                                                 <td>{{ data.surname }}</td>
+                                                 <td>{{ data.credit_score }}</td>
+                                                 <td>{{ data.geography }}</td>
+                                                 <td>{{ data.gender }}</td>
+                                                 <td>{{ data.age }}</td>
+                                                 <td>{{ data.tenure }}</td>
+                                                 <td>{{ data.balance }}</td>
+                                                 <td>{{ data.num_of_products }}</td>
+                                                 <td>{{ data.has_cr_card }}</td>
+                                                 <td>{{ data.is_active_member }}</td>
+                                                 <td>{{ data.estimated_salary }}</td>
+                                                 <td>{{ data.exited }}</td>
+                                                    </tr>
+                                                 {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'assets/demo/datatables-demo.js' %}"></script>
+    </body>
+</html>

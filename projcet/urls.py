@@ -41,4 +41,12 @@ urlpatterns = [
     path('delete_user/',views.delete_user,name = 'delete_user'),
     path('change_user/',views.change_user,name='change_user'),
     path('safe_clients/',views.safe_clients,name = 'safe_clients'),
+    path('change_passwd/',views.change_passwd,name = 'change_passwd'),
+    path('clients_manage/',views.clients_manage,name = 'clients_manage'),
+    path('delete_clients/',views.delete_clients,name = 'delete_clients'),
+    path('add_clients/',views.add_clients,name = 'add_clients'),
+    path('change_clients/',views.change_clients,name = 'change_clients'),
+    path('enxited_clients/',views.exited_clients,name = 'exited_clients'),
+    path('charts/',views.charts,name = 'charts'),
+    # path('text/',views.maxclass,name = 'global_params')
 ]

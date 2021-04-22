@@ -7,10 +7,43 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <title>安全客户</title>
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <div class="modal fade" id="change_passwd" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="{% url 'change_passwd' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addLabel">修改密码</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="old_password_n" class="control-label">请输入旧密码：</label>
+                                <input type="text" class="form-control" id="old_password_n" name="old_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_n" class="control-label">请输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_n" name="new_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_again_n" class="control-label">再次输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_again_n" name="new_password_again" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -26,14 +59,17 @@
                 </div>
             </form>
             <!-- Navbar-->
-            <ul class="navbar-nav ml-auto ml-md-0">
+           <ul class="navbar-nav ml-auto ml-md-0">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <a class="dropdown-item" href="#">设置</a>
+                        <button type="button" class="dropdown-item"
+                                    data-toggle="modal" data-target="#change_passwd"><i class="mdi mdi-window-close"></i>   密码修改
+                            </button>
+{#                        <a class="dropdown-item" href="#">密码修改</a>#}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="{% url 'user_logout'%}">退出</a>
                     </div>
                 </li>
             </ul>
@@ -43,40 +79,40 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <div class="sb-sidenav-menu-heading">主页</div>
                             <a class="nav-link" href="{% url 'index' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 仪表盘
                             </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <div class="sb-sidenav-menu-heading">管理</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
+                                用户
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                    <a class="nav-link" href="{% url 'user_manage' %}">用户管理</a>
+                                    <a class="nav-link" href="layout-static.html">权限管理</a>
+                                    <a class="nav-link" data-toggle="modal" data-target="#change_passwd">密码修改</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
+                                客户
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{% url 'clients_manage' %}" >
+                                        客户信息管理
                                     </a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
+{#                                        <nav class="sb-sidenav-menu-nested nav">#}
+{#                                            <a class="nav-link" href="login.html">Login</a>#}
+{#                                            <a class="nav-link" href="register.html">Register</a>#}
+{#                                            <a class="nav-link" href="password.html">Forgot Password</a>#}
+{#                                        </nav>#}
                                     </div>
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                         Error
@@ -91,7 +127,7 @@
                                     </div>
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
+                            <div class="sb-sidenav-menu-heading">视图</div>
                             <a class="nav-link" href="charts.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
@@ -104,17 +140,17 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        {{ user }}
                     </div>
                 </nav>
             </div>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Tables</h1>
+                        <h1 class="mt-4">安全客户</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Tables</li>
+                            <li class="breadcrumb-item"><a href="index.html">仪表盘</a></li>
+                            <li class="breadcrumb-item active">安全客户</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
@@ -196,7 +232,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                            <div class="text-muted">Copyright &copy; 大嘎嘎</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;

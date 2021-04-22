@@ -7,10 +7,180 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <title>用户管理</title>
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <div class="modal fade" id="change_passwd" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="{% url 'change_passwd' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addLabel">修改密码</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="old_password_n" class="control-label">请输入旧密码：</label>
+                                <input type="text" class="form-control" id="old_password_n" name="old_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_n" class="control-label">请输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_n" name="new_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_again_n" class="control-label">再次输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_again_n" name="new_password_again" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+{#        新增#}
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'add_user' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="addLabel">新增账号信息</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="job_number_n" class="control-label">工号：</label>
+                                                            <input type="text" class="form-control" id="job_number_n" name="job_number" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">用户名：</label>
+                                                            <input type="text" class="form-control" id="name_n" name="user_name" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">姓名：</label>
+                                                            <input type="text" class="form-control" id="name_n" name="name" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">邮箱：</label>
+                                                            <input type="email" class="form-control" id="email_n" name="email" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="department_n" class="control-label">所在部门：</label>
+                                                            <input type="text" class="form-control" id="department_n" name="department" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="department_n" class="control-label">是否为超级管理员(1是/0否)</label>
+                                                            <select class="form-control" name="is_superuser" id="department_n">
+                                                                <option value="1">是</option>
+                                                                <option value="0">否</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="telephone_n" class="control-label">电话：</label>
+                                                            <input type="text" class="form-control" id="telephone_n" name="telephone" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="password_n" class="control-label">登录密码：</label>
+                                                            <input type="text" class="form-control" id="password_n" name="password" required>
+                                {#                                   pattern="^[a-zA-Z]\w{5,21}$">#}
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        <button type="submit" class="btn btn-primary">确定</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+        {#删除#}
+                                    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'delete_user' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="addLabel">删除账号信息</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="job_number_n" class="control-label">工号：</label>
+                                                            <input type="text" class="form-control" id="job_number_n" name="job_number" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        <button type="submit" class="btn btn-primary">确定</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                        {#                    修改账号#}
+                    <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'change_user' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="addLabel">修改账号信息</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">序号：</label>
+                                                            <input type="text" class="form-control" id="id_n" name="change_id" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="job_number_n" class="control-label">工号：</label>
+                                                            <input type="text" class="form-control" id="job_number_n" name="job_number">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">用户名：</label>
+                                                            <input type="text" class="form-control" id="name_n" name="user_name">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">姓名：</label>
+                                                            <input type="text" class="form-control" id="name_n" name="name">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name_n" class="control-label">邮箱：</label>
+                                                            <input type="email" class="form-control" id="email_n" name="email">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="department_n" class="control-label">所在部门：</label>
+                                                            <input type="text" class="form-control" id="department_n" name="department">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="telephone_n" class="control-label">电话：</label>
+                                                            <input type="text" class="form-control" id="telephone_n" name="telephone">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        <button type="submit" class="btn btn-primary">确定</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -31,9 +201,11 @@
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <button type="button" class="dropdown-item"
+                                    data-toggle="modal" data-target="#change_passwd"><i class="mdi mdi-window-close"></i>   密码修改
+                            </button>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="{% url 'user_logout' %}">退出</a>
                     </div>
                 </li>
             </ul>
@@ -44,20 +216,21 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="{% url 'index' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
+                                仪表盘
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
+                                用户
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                    <a class="nav-link" href="{% url 'user_manage' %}">用户管理</a>
+                                    <a class="nav-link" href="layout-static.html">权限管理</a>
+                                    <a class="nav-link" data-toggle="modal" data-target="#change_passwd">密码修改</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -96,15 +269,15 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
-                            <a class="nav-link" href="tables.html">
+                            <a class="nav-link" href="{% url 'client_table' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
+                                客户信息
                             </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        {{ user }}
                     </div>
                 </nav>
             </div>
@@ -112,10 +285,10 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Tables</h1>
+                        <h1 class="mt-4">用户管理</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Tables</li>
+                            <li class="breadcrumb-item"><a href="{% url 'index' %}">仪表盘</a></li>
+                            <li class="breadcrumb-item active">用户管理</li>
                         </ol>
 
                     <div class="card-toolbar clearfix">
@@ -139,147 +312,19 @@
                             <button type="button" class="btn btn-dark m-r-5" data-toggle="modal"
                                     data-target="#add" data-whatever="@mdo"><i class="mdi mdi-plus"></i> 新增
                             </button>
-                            <button type="button" class="btn btn-dark m-r-5" data-toggle="modal"
-                                    data-target="#export"><i class="mdi mdi-file-excel"></i> 导入表格
-                            </button>
+
                             <button type="button" class="btn btn-danger m-r-5"
                                     data-toggle="modal" data-target="#delete"><i class="mdi mdi-window-close"></i> 删除
                             </button>
                         </div>
                     </div>
-{#新增#}
-                                    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addLabel">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <form action="{% url 'add_user' %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                                aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title" id="addLabel">新增账号信息</h4>
-                                                    </div>
 
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="job_number_n" class="control-label">工号：</label>
-                                                            <input type="text" class="form-control" id="job_number_n" name="job_number" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="name_n" class="control-label">用户名：</label>
-                                                            <input type="text" class="form-control" id="name_n" name="user_name" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="name_n" class="control-label">姓名：</label>
-                                                            <input type="text" class="form-control" id="name_n" name="name" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="department_n" class="control-label">所在部门：</label>
-                                                            <input type="text" class="form-control" id="department_n" name="department" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="department_n" class="control-label">是否为超级管理员(1是/0否)</label>
-                                                            <select class="form-control" name="is_superuser" id="department_n">
-                                                                <option value="1">是</option>
-                                                                <option value="0">否</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="telephone_n" class="control-label">电话：</label>
-                                                            <input type="text" class="form-control" id="telephone_n" name="telephone" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="password_n" class="control-label">登录密码：</label>
-                                                            <input type="text" class="form-control" id="password_n" name="password" required>
-                                {#                                   pattern="^[a-zA-Z]\w{5,21}$">#}
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                                        <button type="submit" class="btn btn-primary">确定</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-{#删除#}
-                                    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="addLabel">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <form action="{% url 'delete_user' %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                                aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title" id="addLabel">删除账号信息</h4>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="job_number_n" class="control-label">工号：</label>
-                                                            <input type="text" class="form-control" id="job_number_n" name="job_number" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                                        <button type="submit" class="btn btn-primary">确定</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                        {#                    修改账号#}
-                    <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="addLabel">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <form action="{% url 'change_user' %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                                aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title" id="addLabel">修改账号信息</h4>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="name_n" class="control-label">序号：</label>
-                                                            <input type="text" class="form-control" id="id_n" name="change_id" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="job_number_n" class="control-label">工号：</label>
-                                                            <input type="text" class="form-control" id="job_number_n" name="job_number" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="name_n" class="control-label">用户名：</label>
-                                                            <input type="text" class="form-control" id="name_n" name="user_name" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="name_n" class="control-label">姓名：</label>
-                                                            <input type="text" class="form-control" id="name_n" name="name" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="department_n" class="control-label">所在部门：</label>
-                                                            <input type="text" class="form-control" id="department_n" name="department" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="telephone_n" class="control-label">电话：</label>
-                                                            <input type="text" class="form-control" id="telephone_n" name="telephone" required>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                                        <button type="submit" class="btn btn-primary">确定</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
 
 
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                DataTable Example
+                                用户信息
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -290,6 +335,7 @@
                                                 <th>工号</th>
                                                 <th>用户名</th>
                                                 <th>姓名</th>
+                                                <th>邮箱</th>
                                                 <th>手机</th>
                                                 <th>部门</th>
                                                 <th>是否为超级管理员</th>
@@ -302,6 +348,7 @@
                                                 <th>工号</th>
                                                 <th>用户名</th>
                                                 <th>姓名</th>
+                                                <th>邮箱</th>
                                                 <th>手机</th>
                                                 <th>部门</th>
                                                 <th>是否为超级管理员</th>
@@ -315,6 +362,7 @@
                                                  <td>{{ data.extension.job_number }}</td>
                                                  <td>{{ data.username }}</td>
                                                  <td>{{ data.first_name }}</td>
+                                                 <td>{{ data.email }}</td>
                                                  <td>{{ data.extension.telephone }}</td>
                                                  <td>{{ data.extension.department }}</td>
                                                  <td>{{ data.is_superuser }}</td>

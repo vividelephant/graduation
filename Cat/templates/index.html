@@ -11,10 +11,43 @@
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <div class="modal fade" id="change_passwd" tabindex="-1" role="dialog" aria-labelledby="addLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="{% url 'change_passwd' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addLabel">修改密码</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="old_password_n" class="control-label">请输入旧密码：</label>
+                                <input type="text" class="form-control" id="old_password_n" name="old_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_n" class="control-label">请输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_n" name="new_password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_again_n" class="control-label">再次输入新密码：</label>
+                                <input type="text" class="form-control" id="new_password_again_n" name="new_password_again" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+            <a class="navbar-brand" href="{% url 'index' %}">大嘎嘎</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -31,7 +64,10 @@
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">设置</a>
-                        <a class="dropdown-item" href="#">登陆</a>
+                        <button type="button" class="dropdown-item"
+                                    data-toggle="modal" data-target="#change_passwd"><i class="mdi mdi-window-close"></i>   密码修改
+                            </button>
+{#                        <a class="dropdown-item" href="#">密码修改</a>#}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'user_logout'%}">退出</a>
                     </div>
@@ -43,12 +79,12 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <div class="sb-sidenav-menu-heading">主页</div>
                             <a class="nav-link" href="{% url 'index' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 仪表盘
                             </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <div class="sb-sidenav-menu-heading">管理</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 用户
@@ -58,28 +94,28 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{% url 'user_manage' %}">用户管理</a>
                                     <a class="nav-link" href="layout-static.html">权限管理</a>
-{#                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>#}
-{#                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>#}
+                                    <a class="nav-link" data-toggle="modal" data-target="#change_passwd">密码修改</a>
                                 </nav>
                             </div>
+
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
+                                客户
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{% url 'clients_manage' %}" >
+                                        客户信息管理
                                     </a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
+{#                                        <nav class="sb-sidenav-menu-nested nav">#}
+{#                                            <a class="nav-link" href="login.html">Login</a>#}
+{#                                            <a class="nav-link" href="register.html">Register</a>#}
+{#                                            <a class="nav-link" href="password.html">Forgot Password</a>#}
+{#                                        </nav>#}
                                     </div>
+
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                         Error
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -93,10 +129,10 @@
                                     </div>
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
+                            <div class="sb-sidenav-menu-heading">视图</div>
+                            <a class="nav-link" href="{% url 'charts' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
+                                可视化分析
                             </a>
                             <a class="nav-link" href="{% url 'client_table' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -106,7 +142,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        {{ user }}
                     </div>
                 </nav>
             </div>
@@ -150,7 +186,7 @@
                                 <div class="card bg-danger text-white mb-4">
                                     <div class="card-body">已流失客户</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="{% url 'exited_clients' %}">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
@@ -185,40 +221,40 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
-{#                                            <tr>#}
-{#                                                <th>姓名</th>#}
-{#                                                <th>Position</th>#}
-{#                                                <th>Office</th>#}
-{#                                                <th>Age</th>#}
-{#                                                <th>Start date</th>#}
-{#                                                <th>Salary</th>#}
-{#                                            </tr>#}
-                                            <tr><th>id</th><th>customer_id</th><th>surname</th><th>credit_score</th><th>geography</th><th>gender</th><th>age</th><th>tenure</th><th>balance</th><th>num_of_products</th><th>has_cr_card</th><th>is_active_member</th><th>estimated_salary</th><th>exited</th></tr>
+                                            <tr>
+                                                <th>RowNumber</th>
+                                                <th>CustomerID</th>
+                                                <th>Surname</th>
+                                                <th>CreditScore</th>
+                                                <th>Geography</th>
+                                                <th>Sex</th>
+                                                <th>Age</th>
+                                                <th>Tenure</th>
+                                                <th>Balance</th>
+                                                <th>NumOfProducts</th>
+                                                <th>HasCrCard</th>
+                                                <th>IsActiveMember</th>
+                                                <th>EstimatedSalary</th>
+                                                <th>Exited</th>
+                                            </tr>
                                         </thead>
                                         <tfoot>
-{#                                            <tr>#}
-{#                                                <th>Name</th>#}
-{#                                                <th>Position</th>#}
-{#                                                <th>Office</th>#}
-{#                                                <th>Age</th>#}
-{#                                                <th>Start date</th>#}
-{#                                                <th>Salary</th>#}
-{#                                            </tr>#}
+
                                             <tr>
-                                                <th>id</th>
-                                                <th>customer_id</th>
-                                                <th>surname</th>
-                                                <th>credit_score</th>
-                                                <th>geography</th>
-                                                <th>gender</th>
-                                                <th>age</th>
-                                                <th>tenure</th>
-                                                <th>balance</th>
-                                                <th>num_of_products</th>
-                                                <th>has_cr_card</th>
-                                                <th>is_active_member</th>
-                                                <th>estimated_salary</th>
-                                                <th>exited</th>
+                                                <th>RowNumber</th>
+                                                <th>CustomerID</th>
+                                                <th>Surname</th>
+                                                <th>CreditScore</th>
+                                                <th>Geography</th>
+                                                <th>Sex</th>
+                                                <th>Age</th>
+                                                <th>Tenure</th>
+                                                <th>Balance</th>
+                                                <th>NumOfProducts</th>
+                                                <th>HasCrCard</th>
+                                                <th>IsActiveMember</th>
+                                                <th>EstimatedSalary</th>
+                                                <th>Exited</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
