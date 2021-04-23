@@ -48,6 +48,9 @@ urlpatterns = [
     path('change_clients/',views.change_clients,name = 'change_clients'),
     path('enxited_clients/',views.exited_clients,name = 'exited_clients'),
     path('charts/',views.charts,name = 'charts'),
-    path('all_delete/',views.all_delete),
+    path('safe_clients/',views.safe_clients,name = 'safe_clients'),
+    path('dange_clients/',views.danger_clients,name = 'danger_clients')
+    # path('all_delete/',views.all_delete),
     # path('text/',views.maxclass,name = 'global_params')
+
 ]

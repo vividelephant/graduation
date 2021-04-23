@@ -9,8 +9,7 @@ from django.contrib.auth.decorators import permission_required
 from .models import client
 from .models import User
 from .models import UserExtension
-from .models import client_0
-from .models import client_1
+from .models import total_client
 # from pycaret.classification import *
 
 
@@ -502,14 +501,29 @@ def charts(request):
     }
     return render(request, 'charts.html', context=context)
 
+@login_required
+def safe_clients(request):
+    datas = total_client.objects.filter(client_0_Label=0)
+    # clients = total_client.objects.filter(client_0_id=0)
+    user = request.user
+    context = {
+        'user': user,
+        'datas': datas
+    }
+    return render(request, 'safe_clients.html', context=context)
+@login_required
+def danger_clients(request):
+    datas = total_client.objects.filter(client_1_Label=1)
+    # clients = total_client.objects.filter(client_0_id=0)
+    user = request.user
+    context = {
+        'user': user,
+        'datas': datas
+    }
+    return render(request, 'danger_clients.html', context=context)
 
-def all_delete(request):
-    a = client_1.objects.values("id")
-    for i in a:
-        print(i)
-    # for i in
-    # c = client.objects.get(id=1).Score
-    # return HttpResponse(a)
+
+
 
 
 # 整合client三张表的一次性工具方法
