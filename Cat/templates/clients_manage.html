@@ -44,6 +44,32 @@
                 </div>
             </div>
         </div>
+{#        预测#}
+{#         <div class="modal fade" id="pre" tabindex="-1" role="dialog" aria-labelledby="addLabel">#}
+{#                                        <div class="modal-dialog" role="document">#}
+{#                                            <div class="modal-content">#}
+{#                                                <form action="{% url 'pre_clients' %}" method="post">#}
+{#                                                    {% csrf_token %}#}
+{#                                                    <div class="modal-header">#}
+{#                                                        <h4 class="modal-title" id="addLabel">预测</h4>#}
+{#                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span#}
+{#                                                                aria-hidden="true">&times;</span></button>#}
+{#                                                    </div>#}
+{##}
+{#                                                    <div class="modal-body">#}
+{#                                                        <div class="form-group">#}
+{#                                                            <label for="row_number_n" class="control-label">客户编号(RowNumber):</label>#}
+{#                                                            <input type="number" class="form-control" id="row_number_n" name="row_number">#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                    <div class="modal-footer">#}
+{#                                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>#}
+{#                                                        <button type="submit" class="btn btn-primary">确定</button>#}
+{#                                                    </div>#}
+{#                                                </form>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
 {#        删除客户信息#}
         <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="addLabel">
                                         <div class="modal-dialog" role="document">
@@ -101,7 +127,12 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="Geography_n" class="control-label">地域(Geography):</label>
-                                                            <input type="text" class="form-control" id="Geography_n" name="Geography" required>
+{#                                                            <input type="text" class="form-control" id="Geography_n" name="Geography" required>#}
+                                                            <select class="form-control" name="Geography" id="Geography_n">
+                                                                <option value="France">France</option>
+                                                                <option value="Spain">Spain</option>
+                                                                <option value="Germany">Germany</option>
+                                                            </select>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="Sex_n" class="control-label">性别(Sex):</label>
@@ -194,7 +225,12 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="Geography_n" class="control-label">地域(Geography):</label>
-                                                            <input type="text" class="form-control" id="Geography_n" name="Geography">
+{#                                                            <input type="text" class="form-control" id="Geography_n" name="Geography" required>#}
+                                                            <select class="form-control" name="Geography" id="Geography_n">
+                                                                <option value="France">France</option>
+                                                                <option value="Spain">Spain</option>
+                                                                <option value="Germany">Germany</option>
+                                                            </select>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="Sex_n" class="control-label">性别(Sex):</label>
@@ -295,12 +331,12 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <div class="sb-sidenav-menu-heading">主页</div>
                             <a class="nav-link" href="{% url 'index' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 仪表盘
                             </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <div class="sb-sidenav-menu-heading">管理</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 用户
@@ -337,16 +373,16 @@
                                     <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
+                                            <a class="nav-link" href="error.html">404 Page</a>
                                             <a class="nav-link" href="500.html">500 Page</a>
                                         </nav>
                                     </div>
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
+                            <div class="sb-sidenav-menu-heading">视图</div>
+                            <a class="nav-link" href="{% url 'charts' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
+                                可视化分析
                             </a>
                             <a class="nav-link" href="{% url 'client_table' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -361,6 +397,21 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
+            {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'success'%}
+                            <div class="alert alert-success alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>成功!</strong> {{ message }}
+                            </div>
+                        {% elif message.tags == 'error'%}
+                            <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>错误!</strong> {{message}}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">客户信息管理</h1>
@@ -380,6 +431,10 @@
                             <button type="button" class="btn btn-danger m-r-5"
                                     data-toggle="modal" data-target="#delete"><i class="mdi mdi-window-close"></i> 删除
                             </button>
+                            <button type="button" class="btn btn-dark m-r-5" data-toggle="modal"
+                                    data-target="#pre" data-whatever="@mdo"><i class="mdi mdi-plus"></i> 预测
+                            </button>
+
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">

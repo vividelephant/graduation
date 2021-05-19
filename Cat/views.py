@@ -12,12 +12,12 @@ from .models import UserExtension
 from .models import total_client
 # from pycaret.classification import *
 
-
+from Dog.apps import *
 import numpy as np
 import pandas as pd
 
-pd.options.display.max_rows = None
-pd.options.display.max_columns = None
+# pd.options.display.max_rows = None
+# pd.options.display.max_columns = None
 
 
 # from .models import cal
@@ -107,13 +107,16 @@ def client_table(request):
 # 用户管理
 @login_required
 def user_manage(request):
-    datas = User.objects.all()
-    user = request.user
-    context = {
-        'datas': datas,
-        'user': user
-    }
-    return render(request, 'user_manage.html', context=context)
+    if request.user.is_superuser:
+        datas = User.objects.all()
+        user = request.user
+        context = {
+            'datas': datas,
+            'user': user
+        }
+        return render(request, 'user_manage.html', context=context)
+    else:
+        return render(request,'error.html')
 
 
 # 新增账号方法
@@ -145,6 +148,7 @@ def add_user(request):
         user.save()
         # 写入成功提示
         messages.success(request, '用户增加成功')
+        return redirect('user_manage')
     except:
         # 写入失败提示
         messages.error(request, '用户增加失败')
@@ -158,13 +162,13 @@ def add_user(request):
 def delete_user(request):
     job_number = str(request.POST.get('job_number')).strip()
     # user_name = str(request.POST.get('user_name')).strip()
-    current_user_id = str(User.objects.get(id=request.user.id).id)
+    # current_user_id = str(User.objects.get(id=request.user.id).id)
+    current_user_id = request.user
     # user_is_superuser = str(User.objects.filter(is_superuser=request.user.is_superuser).is_superuser)#修改人的superuser
     # current_is_superuser = str(User.objects.filter(job_number =job_number).is_superuser)
 
     if current_user_id == job_number:
         messages.error(request, '不可以删除当前登录的账号')
-        return HttpResponse('error')
     else:
         user = UserExtension.objects.get(job_number=job_number)
         id = UserExtension.objects.get(job_number=job_number).user_id
@@ -211,7 +215,7 @@ def change_user(request):
     # 重载账号展示页面
     return redirect('user_manage')
 
-
+#安全客户界面
 @login_required
 def safe_clients(request):
     # datas = client.objects.filter(exited=)
@@ -301,8 +305,10 @@ def delete_clients(request):
     id = request.POST.get('id')
     if row_number != '':
         client.objects.get(id=row_number).delete()
+        messages.success(request, '删除客户信息成功')
     if id != '':
         client.objects.filter(customer_id=id).delete()
+        messages.success(request, '删除客户信息成功')
     return redirect('clients_manage')
 
 
@@ -343,9 +349,8 @@ def add_clients(request):
     # 写入成功提示
     messages.success(request, '用户增加成功')
     # 写入失败提示
-    messages.error(request, '用户增加失败')
     # 重载账号展示页面
-    return redirect('')
+    return redirect('clients_manage')
 
 
 # 修改客户信息
@@ -402,86 +407,6 @@ def change_clients(request):
     # 重载账号展示页面
     return redirect('clients_manage')
 
-
-# #处理
-# def DfPrepPipeline(df_predict, df_train_Cols, minVec, maxVec):
-#     df_predict['BalanceSalaryRatio'] = df_predict.Balance / df_predict.EstimatedSalary
-#     df_predict['TenureByAge'] = df_predict.Tenure / (df_predict.Age - 18)
-#     df_predict['CreditScoreGivenAge'] = df_predict.CreditScore / (df_predict.Age - 18)
-#     continuous_vars = ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'EstimatedSalary',
-#                        'BalanceSalaryRatio',
-#                        'TenureByAge', 'CreditScoreGivenAge']
-#     cat_vars = ['HasCrCard', 'IsActiveMember', "Geography", "Gender"]
-#     df_predict = df_predict[['Exited'] + continuous_vars + cat_vars]
-#     df_predict.loc[df_predict.HasCrCard == 0, 'HasCrCard'] = -1
-#     df_predict.loc[df_predict.IsActiveMember == 0, 'IsActiveMember'] = -1
-#     lst = ["Geography", "Gender"]
-#     remove = list()
-#     for i in lst:
-#         for j in df_predict[i].unique():
-#             df_predict[i + '_' + j] = np.where(df_predict[i] == j, 1, -1)
-#         remove.append(i)
-#     df_predict = df_predict.drop(remove, axis=1)
-#     L = list(set(df_train_Cols) - set(df_predict.columns))
-#     for l in L:
-#         df_predict[str(l)] = -1
-#     df_predict[continuous_vars] = (df_predict[continuous_vars] - minVec) / (maxVec - minVec)
-#     df_predict = df_predict[df_train_Cols]
-#     return df_predict
-
-
-# def maxclass(request):
-#     df = pd.read_csv('/Users/mac/Desktop/graduation/Churn_Modelling.csv', delimiter=',')
-#     df = df.drop(["RowNumber", "CustomerId", "Surname"], axis = 1)
-#     #分为%80训练集
-#     df_train = df.sample(frac=0.8,random_state=200)
-#     df_test = df.drop(df_train.index)
-#     #添加之前可视化不相关变量的比值。
-#     df_train['BalanceSalaryRatio'] = df_train.Balance/df_train.EstimatedSalary
-#     df_train['TenureByAge'] = df_train.Tenure/(df_train.Age)
-#     df_train['CreditScoreGivenAge'] = df_train.CreditScore/(df_train.Age)
-#     #用之前分的训练集和测试集取得maxVec和minVec
-#     continuous_vars = ['CreditScore',  'Age', 'Tenure', 'Balance','NumOfProducts', 'EstimatedSalary', 'BalanceSalaryRatio',
-#                     'TenureByAge','CreditScoreGivenAge']
-#     cat_vars = ['HasCrCard', 'IsActiveMember','Geography', 'Gender']
-#     df_train = df_train[['Exited'] + continuous_vars + cat_vars]
-#     df_train.loc[df_train.HasCrCard == 0, 'HasCrCard'] = -1
-#     df_train.loc[df_train.IsActiveMember == 0, 'IsActiveMember'] = -1
-#     lst = ['Geography', 'Gender']
-#     remove = list()
-#     for i in lst:
-#         if (df_train[i].dtype == np.str or df_train[i].dtype == np.object):
-#             for j in df_train[i].unique():
-#                 df_train[i+'_'+j] = np.where(df_train[i] == j,1,-1)
-#             remove.append(i)
-#     df_train = df_train.drop(remove, axis=1)
-#     minVec = df_train[continuous_vars].min().copy()
-#     maxVec = df_train[continuous_vars].max().copy()
-#     df_train[continuous_vars] = (df_train[continuous_vars]-minVec)/(maxVec-minVec)
-#     ##main
-#     test= pd.read_csv('/Users/mac/Desktop/graduation/test.csv')
-#     ##测试df
-#     df1 = {'CreditScore':[1],'Geography':['France'],'Gender':['Female'],'Age':[50],'Tenure':[1],'Balance':[1],'NumOfProducts':[1]
-#                 ,'HasCrCard':[1],'IsActiveMember':[1],'EstimatedSalary':[1],'Exited':[1]}
-#     df1_df = pd.DataFrame(df1)
-#     a = DfPrepPipeline(df1_df,df_train.columns,minVec,maxVec)#原始函数特征工程
-#     aa = test.append(a)
-#     #读取模型pkl
-#     # setup(data = test, target = 'Exited')
-#     # setup(data=test,target='Exited')
-#     # df_predict = load_model('Final Xgboost Model 20200723')
-#
-#     df_predict = load_model('/Users/mac/Desktop/graduation/gbc,rf,lightgbm_meta=ada.pkl')
-#     deploy_model(df_predict,)
-#     pre = predict_model(df_predict,data=aa)
-#     print(pre.iloc[-1,-2])
-#     if pre.iloc[-1,-2] == 0:
-#         # return '客户对我们很满意'
-#         print('客户对我们很满意')
-#     else:
-#         # return '客户对我们有些失望，要想办法挽留客户'
-#         print('客户对我们有些失望，要想办法挽留客户')
-#
 @login_required
 def exited_clients(request):
     user = request.user
@@ -522,94 +447,3 @@ def danger_clients(request):
     }
     return render(request, 'danger_clients.html', context=context)
 
-
-
-
-
-# 整合client三张表的一次性工具方法
-# def get_total_client(request):
-#     from .models import client, client_1, client_0, total_client
-#
-#     for temp_id in range(1, 10001):
-#         # 取出client中的数据
-#         try:
-#             client_id = client.objects.get(id=temp_id).id
-#             customer_id = client.objects.get(id=temp_id).customer_id
-#             surname = client.objects.get(id=temp_id).surname
-#             credit_score = client.objects.get(id=temp_id).credit_score
-#             geography = client.objects.get(id=temp_id).geography
-#             gender = client.objects.get(id=temp_id).gender
-#             age = client.objects.get(id=temp_id).age
-#             tenure = client.objects.get(id=temp_id).tenure
-#             balance = client.objects.get(id=temp_id).balance
-#             num_of_products = client.objects.get(id=temp_id).num_of_products
-#             has_cr_card = client.objects.get(id=temp_id).has_cr_card
-#             is_active_member = client.objects.get(id=temp_id).is_active_member
-#             estimated_salary = client.objects.get(id=temp_id).estimated_salary
-#             exited = client.objects.get(id=temp_id).exited
-#             Label = client.objects.get(id=temp_id).Label
-#             Score = client.objects.get(id=temp_id).Score
-#         except:
-#             client_id = None
-#             customer_id = None
-#             surname = None
-#             credit_score = None
-#             geography = None
-#             gender = None
-#             age = None
-#             tenure = None
-#             balance = None
-#             num_of_products = None
-#             has_cr_card = None
-#             is_active_member = None
-#             estimated_salary = None
-#             exited = None
-#             Label = None
-#             Score = None
-#
-#         # 取出client_0的数据
-#         try:
-#             client_0_id = client_0.objects.get(id=temp_id).id
-#             client_0_Label = client_0.objects.get(id=temp_id).Label
-#             client_0_Score = client_0.objects.get(id=temp_id).Score
-#         except:
-#             client_0_id = None
-#             client_0_Label = None
-#             client_0_Score = None
-#
-#         # 取出client_1的数据
-#         try:
-#             client_1_id = client_1.objects.get(id=temp_id).id
-#             client_1_Label = client_1.objects.get(id=temp_id).Label
-#             client_1_Score = client_1.objects.get(id=temp_id).Score
-#         except:
-#             client_1_id = None
-#             client_1_Label = None
-#             client_1_Score = None
-#
-#         total_client.objects.create(
-#             client_id=client_id,
-#             customer_id=customer_id,
-#             surname=surname,
-#             credit_score=credit_score,
-#             geography=geography,
-#             gender=gender,
-#             age=age,
-#             tenure=tenure,
-#             balance=balance,
-#             num_of_products=num_of_products,
-#             has_cr_card=has_cr_card,
-#             is_active_member=is_active_member,
-#             estimated_salary=estimated_salary,
-#             exited=exited,
-#             Label=Label,
-#             Score=Score,
-#             client_0_id=client_0_id,
-#             client_0_Label=client_0_Label,
-#             client_0_Score=client_0_Score,
-#             client_1_id=client_1_id,
-#             client_1_Label=client_1_Label,
-#             client_1_Score=client_1_Score,
-#         )
-#         print(temp_id)
-#     return HttpResponse('success')
